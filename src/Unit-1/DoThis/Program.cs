@@ -13,15 +13,18 @@ namespace WinTail
             // initialize MyActorSystem
             // YOU NEED TO FILL IN HERE
             MyActorSystem = ActorSystem.Create("MyActorSystem");
-            
-            
-            // time to make your first actors!
-            //YOU NEED TO FILL IN HERE
-            // make consoleWriterActor using these props: Props.Create(() => new ConsoleWriterActor())
-            // make consoleReaderActor using these props: Props.Create(() => new ConsoleReaderActor(consoleWriterActor))
-            var consoleWriterActor = MyActorSystem.ActorOf(Props.Create(() => new ConsoleWriterActor()));
-            var consoleReaderActor = MyActorSystem.ActorOf(Props.Create(() => new ConsoleReaderActor(consoleWriterActor)));
 
+            Props consoleWritterProps = Props.Create<ConsoleWriterActor>();
+            IActorRef consoleWritterActor = MyActorSystem.ActorOf(consoleWritterProps, "consoleWroterActor");
+
+            Props validationActorProps = Props.Create(() => new ValidationActor(consoleWritterActor));
+            IActorRef validatorActor = MyActorSystem.ActorOf(validationActorProps, "validationActor");
+
+            Props consoleReaderProps = Props.Create<ConsoleReaderActor>(validatorActor);
+            IActorRef consoleReaderActor = MyActorSystem.ActorOf(consoleReaderProps, "consoleReaderActor");
+
+
+            
             // tell console reader to begin
             //YOU NEED TO FILL IN HERE
             consoleReaderActor.Tell(ConsoleReaderActor.StartCommand);
