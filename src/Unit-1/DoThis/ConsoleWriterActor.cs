@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Akka.Actor;
 
 namespace WinTail
@@ -29,7 +29,6 @@ namespace WinTail
             }
 
             Console.ResetColor();
-
         }
     }
 }
